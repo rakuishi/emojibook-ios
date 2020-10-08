@@ -121,4 +121,9 @@ struct Emoji: Identifiable {
         description: "A rectangular map of the world. Generally depicted as a paper map creased at its folds, Earth’s surface shown in green on blue ocean."),
     ]
   }
+  
+  static func random() -> Emoji {
+    let emojis = Emoji.galleries()
+    return emojis[Int.random(in: 0..<emojis.count)]
+  }
 }
