@@ -28,6 +28,7 @@ struct EmojiWidgetView: View {
         EmptyView()
       }
     }
+    .widgetURL(emoji.url)
   }
 }
 

@@ -9,18 +9,16 @@ import SwiftUI
 
 struct EmojibookListView: View {
   let emojis = Emoji.galleries()
-  @State private var showingDetail = false
+  @State private var visibleEmoji: Emoji?
   
   var body: some View {
     NavigationView {
       List {
         ForEach(emojis) { emoji in
           Button(action: {
-            showingDetail.toggle()
+            visibleEmoji = emoji
           }, label: {
             EmojiItemView(emoji: emoji)
-          }).sheet(isPresented: $showingDetail, content: {
-            EmojiDetailView(emoji: emoji)
           })
         }
       }
@@ -28,6 +26,13 @@ struct EmojibookListView: View {
       .listStyle(InsetGroupedListStyle())
       .navigationBarTitle("Emojibook")
     }
+    .onOpenURL(perform: { url in
+      guard let emoji = emojis.first(where: { $0.url == url }) else { return }
+      visibleEmoji = emoji
+    })
+    .sheet(item: $visibleEmoji, content: { emoji in
+      EmojiDetailView(emoji: emoji)
+    })
   }
 }
 
@@ -53,7 +58,7 @@ struct EmojiDetailView: View {
       Color(UIColor.random).edgesIgnoringSafeArea(.all)
       VStack {
         Text(emoji.character)
-          .font(.largeTitle)
+          .font(.system(size: 80))
           .padding([.leading, .trailing, .bottom])
         Text(emoji.name)
           .font(.title)

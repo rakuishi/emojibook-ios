@@ -11,7 +11,15 @@ struct Emoji: Identifiable {
   let character: String
   let name: String
   let description: String
+  let url: URL?
   var id: String { character }
+  
+  init(character: String, name: String, description: String) {
+    self.character = character
+    self.name = name
+    self.description = description
+    self.url = URL(string: "emoji://\(name.filter { !$0.isWhitespace })")
+  }
   
   static func galleries() -> [Emoji] {
     return [
